@@ -21,9 +21,6 @@ export default function RoomCard({ room }) {
                   <i className="fa fa-expand" /> <strong>Size:</strong> {room.sizeSqft} sqft
                 </li>
               )}
-              <li>
-                <i className="fa fa-user" /> <strong>Adult:</strong> {room.capacityAdults}
-              </li>
               {room.bedType && (
                 <li>
                   <i className="fa fa-bed" /> <strong>Bed:</strong> {room.bedType}

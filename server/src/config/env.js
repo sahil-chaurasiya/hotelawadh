@@ -23,6 +23,10 @@ if (missingOptional.length && process.env.NODE_ENV !== 'test') {
   );
 }
 
+if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+  console.warn('[env] RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET not set. Online payments will be unavailable.');
+}
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT, 10) || 5000,
@@ -35,6 +39,11 @@ export const env = {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
     apiKey: process.env.CLOUDINARY_API_KEY || '',
     apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+  },
+  razorpay: {
+    keyId: process.env.RAZORPAY_KEY_ID || '',
+    keySecret: process.env.RAZORPAY_KEY_SECRET || '',
+    webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || '',
   },
   seedAdmin: {
     email: process.env.SEED_ADMIN_EMAIL || 'admin@sharan.test',

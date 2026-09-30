@@ -16,6 +16,11 @@ const siteSettingSchema = new mongoose.Schema(
     },
     checkInTime: { type: String, default: '12:00 PM' },
     checkOutTime: { type: String, default: '11:00 AM' },
+    // ---- Online booking ----
+    onlineBookingEnabled: { type: Boolean, default: true },
+    taxPercent: { type: Number, default: 0, min: 0, max: 100 }, // GST % added on top of room tariff
+    advancePercent: { type: Number, default: 100, min: 1, max: 100 }, // % of total collected online at booking
+    maxRoomsPerBooking: { type: Number, default: 5, min: 1 },
     testimonialsBgImage: imageSchema,
     // Per-page hero banner (the dark image behind each page's title +
     // breadcrumb, e.g. "About Us" / "Contact Us"). Optional — pages fall

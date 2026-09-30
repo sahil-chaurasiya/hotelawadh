@@ -8,7 +8,9 @@ const roomSchema = new mongoose.Schema(
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'RoomCategory', required: true },
     description: { type: String, required: true },
     shortDescription: { type: String, default: '' },
-    price: { type: Number, required: true, min: 0 }, // per night, authoritative
+    price: { type: Number, required: true, min: 0 }, // per night, authoritative. Single-occupancy tariff (or the only tariff if priceDouble is 0)
+    priceDouble: { type: Number, default: 0, min: 0 }, // per night, double occupancy. 0 = same as `price`
+    extraPersonPrice: { type: Number, default: 600, min: 0 }, // per extra adult per night beyond 2
     capacityAdults: { type: Number, required: true, min: 1 },
     capacityChildren: { type: Number, default: 0, min: 0 },
     sizeSqft: { type: Number },

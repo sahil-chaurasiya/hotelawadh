@@ -32,6 +32,11 @@ export default function AdminSettings() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
+  const onNumberChange = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value === '' ? '' : Number(value) }));
+  };
+
   const onSocialChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, socialLinks: { ...f.socialLinks, [name]: value } }));
@@ -123,6 +128,37 @@ export default function AdminSettings() {
             <input name="checkOutTime" value={form.checkOutTime} onChange={onChange} style={input} />
           </div>
         </div>
+        <h3 style={{ marginTop: 0 }}>Online booking &amp; payments</h3>
+        <p style={{ color: '#666', fontSize: 13, marginTop: -6 }}>
+          Controls the booking widget on each room page. Razorpay keys are set in the server&apos;s <code>.env</code> file
+          (never here).
+        </p>
+        <div style={grid2}>
+          <div>
+            <label style={label}>Accept online bookings</label>
+            <select
+              value={form.onlineBookingEnabled === false ? 'no' : 'yes'}
+              onChange={(e) => setForm((f) => ({ ...f, onlineBookingEnabled: e.target.value === 'yes' }))}
+              style={input}
+            >
+              <option value="yes">Yes</option>
+              <option value="no">No (customers are asked to call)</option>
+            </select>
+          </div>
+          <div>
+            <label style={label}>GST / tax % added to room tariff</label>
+            <input name="taxPercent" type="number" min="0" max="100" step="0.01" value={form.taxPercent ?? 0} onChange={onNumberChange} style={input} />
+          </div>
+          <div>
+            <label style={label}>% collected online at booking</label>
+            <input name="advancePercent" type="number" min="1" max="100" value={form.advancePercent ?? 100} onChange={onNumberChange} style={input} />
+          </div>
+          <div>
+            <label style={label}>Max rooms per online booking</label>
+            <input name="maxRoomsPerBooking" type="number" min="1" value={form.maxRoomsPerBooking ?? 5} onChange={onNumberChange} style={input} />
+          </div>
+        </div>
+
         <h3 style={{ marginTop: 0 }}>Social links</h3>
         <p style={{ color: '#666', fontSize: 13, marginTop: -6 }}>
           All optional. Leave a field blank to hide that icon in the site footer — only the ones

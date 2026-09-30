@@ -12,8 +12,6 @@ export default function BookingSearchForm() {
   const pickerRef = useRef(null);
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
-  const [adults, setAdults] = useState('2');
-  const [children, setChildren] = useState('0');
 
   // Initialize the original t-datepicker plugin exactly as custom.js did,
   // and read its selection through the onChangeCI/onChangeCO custom events.
@@ -37,7 +35,6 @@ export default function BookingSearchForm() {
     const params = new URLSearchParams();
     if (checkIn) params.set('checkIn', checkIn);
     if (checkOut) params.set('checkOut', checkOut);
-    params.set('guests', String(Number(adults) + Number(children) || 1));
     navigate(`/rooms?${params.toString()}`);
   };
 
@@ -57,42 +54,6 @@ export default function BookingSearchForm() {
                     <div className="t-datepicker" ref={pickerRef}>
                       <div className="t-check-in form-control" />
                       <div className="t-check-out form-control" />
-                    </div>
-                  </div>
-                </li>
-
-                <li className="adult-type-block">
-                  <div className="form-group">
-                    <label>Adult</label>
-                    <div className="select-box">
-                      <select
-                        className="form-control"
-                        value={adults}
-                        onChange={(e) => setAdults(e.target.value)}
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                      </select>
-                    </div>
-                  </div>
-                </li>
-
-                <li className="children-type-block">
-                  <div className="form-group">
-                    <label>Childrens</label>
-                    <div className="select-box">
-                      <select
-                        className="form-control"
-                        value={children}
-                        onChange={(e) => setChildren(e.target.value)}
-                      >
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
                     </div>
                   </div>
                 </li>

@@ -71,7 +71,13 @@ export function createApp() {
     },
     credentials: true,
   }));
-  app.use(express.json({ limit: '1mb' }));
+  // Keep the raw body so the Razorpay webhook signature can be verified.
+  app.use(express.json({
+    limit: '1mb',
+    verify: (req, res, buf) => {
+      if (req.originalUrl.startsWith('/api/bookings/razorpay-webhook')) req.rawBody = buf;
+    },
+  }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
   app.use(cookieParser());
   app.use(mongoSanitize());

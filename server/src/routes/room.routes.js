@@ -26,6 +26,16 @@ router.get(
   })
 );
 
+// Admin: every room, whatever its status (the public list only shows active ones)
+router.get(
+  '/admin/all',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const rooms = await Room.find().populate('category').populate('amenities').sort({ displayOrder: 1, createdAt: -1 });
+    res.json({ success: true, data: rooms });
+  })
+);
+
 router.get(
   '/search',
   [
@@ -133,7 +143,9 @@ router.put(
   '/:id',
   requireAuth,
   asyncHandler(async (req, res) => {
-    const room = await Room.findByIdAndUpdate(req.params.id, req.body, {
+    // Images are managed only through the /images endpoints — saving room details must never touch them.
+    const { images, _id, createdAt, updatedAt, ...updates } = req.body;
+    const room = await Room.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
@@ -161,7 +173,11 @@ router.delete(
     }
 
     for (const img of room.images) {
-      await deleteFromCloudinary(img.publicId);
+      try {
+        await deleteFromCloudinary(img.publicId);
+      } catch (err) {
+        console.warn('[rooms] cloudinary delete failed (continuing):', err.message);
+      }
     }
     await room.deleteOne();
     res.json({ success: true });
@@ -196,7 +212,12 @@ router.delete(
     const publicId = decodeURIComponent(req.params.publicId);
     const img = room.images.find((i) => i.publicId === publicId);
     if (!img) return res.status(404).json({ success: false, message: 'Image not found' });
-    await deleteFromCloudinary(publicId);
+    try {
+      await deleteFromCloudinary(publicId);
+    } catch (err) {
+      // Don't let a Cloudinary hiccup (or a non-Cloudinary/local image) block removal from the room.
+      console.warn('[rooms] cloudinary delete failed (continuing):', err.message);
+    }
     room.images = room.images.filter((i) => i.publicId !== publicId);
     await room.save();
     res.json({ success: true, data: room });
