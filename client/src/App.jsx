@@ -11,7 +11,6 @@ import News from './pages/News';
 import NewsDetail from './pages/NewsDetail';
 import Gallery from './pages/Gallery';
 import NotFound from './pages/NotFound';
-import Maintenance from './pages/Maintenance';
 
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
@@ -37,15 +36,6 @@ export default function App() {
   return (
     <AdminAuthProvider>
       <Routes>
-        {/* ------------------------------------------------------------------
-            MAINTENANCE MODE IS ON.
-            Every public URL (any path that isn't /admin/...) renders the
-            Maintenance page below. The real site routes are kept here,
-            commented out, so you can go live again by:
-              1. Deleting/commenting the "<Route path="*" element={<Maintenance />} />" line
-              2. Uncommenting the <Route element={<PublicLayout />}>...</Route> block
-        ------------------------------------------------------------------- */}
-        {/*
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -56,23 +46,6 @@ export default function App() {
           <Route path="/news/:slug" element={<NewsDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="*" element={<NotFound />} />
-        </Route>
-        */}
-
-        {/* ------------------------------------------------------------------
-            Hidden preview of the real site while maintenance mode is on.
-            Not linked anywhere — only reachable if you type the URL.
-            Same pages as before, just mounted under /preview instead of /.
-        ------------------------------------------------------------------- */}
-        <Route path="/preview" element={<PublicLayout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="rooms" element={<Rooms />} />
-          <Route path="rooms/:slug" element={<RoomDetail />} />
-          <Route path="news" element={<News />} />
-          <Route path="news/:slug" element={<NewsDetail />} />
-          <Route path="gallery" element={<Gallery />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -95,9 +68,6 @@ export default function App() {
           <Route path="services" element={<AdminServices />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
-
-        {/* Catch every other path (the whole public site) with Maintenance */}
-        <Route path="*" element={<Maintenance />} />
       </Routes>
     </AdminAuthProvider>
   );
